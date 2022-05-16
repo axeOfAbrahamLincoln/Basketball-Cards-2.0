@@ -1,11 +1,16 @@
 const { playerService } = require("./playerService");
 const fs = require("fs");
+const { Player } = require("./playerClass");
 
 let playerDB = {
 	filePath: "playerDB.txt",
 	toReadFile: function () {
 		try {
-			playerService.playerList = fs.readFileSync(this.filePath, "utf-8").split(/\r?\n/).map(JSON.parse);
+			playerService.playerList = fs
+				.readFileSync(this.filePath, "utf-8")
+				.split(/\r?\n/)
+				.map(JSON.parse)
+				.map((obj) => new Player(obj.name, obj.team, obj.rpg, obj.ppg, obj.apg)); //! this function allows that regular objects from file read back like Player(class) instance.
 		} catch (err) {
 			console.log("List is empty, nothing to read");
 		}
