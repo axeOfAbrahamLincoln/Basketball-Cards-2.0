@@ -60,7 +60,7 @@ playerService = {
 			if (shouldSave) {
 				console.log("Player card:");
 				let newPlayer = new Player(...playerData);
-				this.printCard(newPlayer);
+				newPlayer.printCard();
 				this.playerList.push(newPlayer); //add newPlayer to playerList
 				console.log("\nSaved!");
 			} else {
@@ -77,6 +77,7 @@ playerService = {
 		const UPDATE_team = 2;
 
 		const UPDATE_SaveAndExit = 6;
+
 		//if playerList has entries
 		if (this.playerList.length > 0) {
 			console.log("Enter the name of the player you want to update:");
@@ -86,7 +87,7 @@ playerService = {
 			if (searchResult) {
 				while (true) {
 					console.log(`\nPlayer card:`);
-					this.printCard(searchResult); // print player details
+					searchResult.printCard(); // print player details
 					console.log("What would you like to update? :\n");
 					printMenu(updateMenu, "update"); // print the update menu
 					updateMenuInput = Number(nextLine()); // user input from update menu
@@ -103,14 +104,14 @@ playerService = {
 										console.log("\nthis name is already taken\n");
 										continue;
 									} else {
-										this.updateValues(newEntry, searchResult, updateMenuInput);
+										searchResult.updateValues(newEntry, updateMenuInput);
 										console.log("\n!!updated!!\n");
 										console.log("press Enter to continue");
 										nextLine();
 										break; //back to update menu
 									}
 								} else if (newEntry && updateMenuInput == UPDATE_team) {
-									this.updateValues(newEntry, searchResult, updateMenuInput);
+									searchResult.updateValues(newEntry, updateMenuInput);
 									console.log("\n!!updated!!\n");
 									console.log("press Enter to continue");
 									nextLine();
@@ -130,7 +131,7 @@ playerService = {
 								let newEntry = Number(nextLine());
 								// correct entry (positiv number)
 								if (newEntry >= 0) {
-									this.updateValues(newEntry, searchResult, updateMenuInput);
+									searchResult.updateValues(newEntry, updateMenuInput);
 									console.log("\n!!! updated !!!\n");
 									console.log("press Enter to continue");
 									nextLine();
@@ -184,7 +185,7 @@ playerService = {
 				// if player card found
 				if (searchResult) {
 					console.log(`\nPlayer card:`);
-					this.printCard(searchResult); // print the player card before ask to delete
+					searchResult.printCard(); // print the player card before ask to delete
 					while (true) {
 						console.log(`Are you sure you want to delete ${searchResult.name}'s player card?`);
 
@@ -230,7 +231,7 @@ playerService = {
 			//if player found in playerList
 			if (searchResult) {
 				console.log(`\nPlayer card:`);
-				this.printCard(searchResult); // print the player card
+				searchResult.printCard(); // print the player card
 				console.log("press ENTER to continue");
 				nextLine();
 			}
@@ -256,12 +257,12 @@ playerService = {
 			let searchResult = this.playerList.filter((elm) => elm.name.toLowerCase().includes(search) || elm.team.toLowerCase().includes(search)); //  searching for the PART of the name of the player or team
 
 			// if there is a match
-			if (searchResult) {
+			if (searchResult && search !== "") {
 				console.log("Search result:\n");
 				// printing all the found players and teams
 				for (let a = 0; a < searchResult.length; a++) {
 					console.log(a + 1);
-					this.printCard(searchResult[a]);
+					searchResult[a].printCard();
 				}
 				console.log("press ENTER to continue");
 				nextLine();
@@ -362,7 +363,7 @@ playerService = {
 						console.log("Search result:\n");
 						for (let a = 0; a < sortedTeamList.length; a++) {
 							console.log(a + 1);
-							this.printCard(sortedTeamList[a]);
+							sortedTeamList[a].printCard();
 						}
 						console.log("press ENTER to continue");
 						nextLine();
@@ -375,7 +376,7 @@ playerService = {
 					console.log("Search result:\n");
 					for (let a = 0; a < sortedAllPlayer.length; a++) {
 						console.log(a + 1);
-						this.printCard(sortedAllPlayer[a]);
+						sortedAllPlayer[a].printCard();
 					}
 					console.log("press ENTER to continue");
 					nextLine();
@@ -401,23 +402,6 @@ playerService = {
 	},
 	searchTeam: function (toSearch) {
 		return this.playerList.filter((elm) => elm.team.toLowerCase() == toSearch);
-	},
-	printCard: function (obj) {
-		console.log(`name: ${obj.name}\nteam: ${obj.team}`);
-		console.log(`RPG: ${obj.rpg} PPG: ${obj.ppg} APG: ${obj.apg}\n`);
-	},
-	updateValues: function (newValue, obj, atribute) {
-		if (atribute == 1) {
-			obj.name = newValue;
-		} else if (atribute == 2) {
-			obj.team = newValue;
-		} else if (atribute == 3) {
-			obj.rpg = newValue;
-		} else if (atribute == 4) {
-			obj.ppg = newValue;
-		} else if (atribute == 5) {
-			obj.apg = newValue;
-		}
 	},
 };
 
